@@ -369,7 +369,7 @@
     }
   },
   "scripts": {
-    "vscode:prepublish": "rm -rf out && npm run esbuild-base -- --minify",
+    "vscode:prepublish": "rimraf out && npm run esbuild-base -- --minify",
     "esbuild-base": "esbuild ./src/extension.ts --bundle --outfile=out/extension.js --external:vscode --format=cjs --platform=node",
     "esbuild-base-minify": "esbuild ./src/extension.ts --bundle --outfile=out/extension.js --external:vscode --format=cjs --platform=node --minify",
     "esbuild-base-minify-analyze": "esbuild ./src/extension.ts --bundle --outfile=out/extension.js --external:vscode --format=cjs --platform=node --minify --analyze",
@@ -377,12 +377,13 @@
     "esbuild-watch": "npm run esbuild-base -- --sourcemap --watch",
     "watch": "npm run esbuild --watch",
     "lint": "tsc --noEmit && eslint src --ext ts",
-    "pretest": "yarn run esbuild-base",
-    "test:compile": "rm -rf out && tsc -p ./ && mkdir out/mocha-tests/files && cp -r src/mocha-tests/files/ out/mocha-tests/files/",
+    "pretest": "npm run esbuild-base",
+    "test:compile": "rimraf out && tsc -p ./ && cpx2 \"src/mocha-tests/files/**/*\" out/mocha-tests/files/",
     "test": "npm run test:compile && npm run test:jest && node ./out/mocha-tests/runTests.js",
     "test:jest": "jest --config jest.config.ts",
     "test:jest:coverage": "jest --config jest.config.ts --coverage",
-    "test:jest:coverage:report": "jest --config jest.config.ts --coverage && open ./coverage/lcov-report/index.html"
+    "test:jest:coverage:report": "jest --config jest.config.ts --coverage && open ./coverage/lcov-report/index.html",
+    "format": "prettier --write \"src/**/*.ts\""
   },
   "devDependencies": {
     "@types/acorn": "^6.0.4",
@@ -397,6 +398,7 @@
     "@vscode/test-electron": "^2.4.1",
     "chai": "^4.3.7",
     "chalk": "^4.1.0",
+    "cpx2": "^8.0.0",
     "esbuild": "^0.25.4",
     "eslint": "^9.27.0",
     "eslint-config-prettier": "^8.5.0",
@@ -405,6 +407,7 @@
     "jest": "^30.0.0",
     "mocha": "^11.2.2",
     "prettier": "^3.5.3",
+    "rimraf": "^6.0.1",
     "ts-jest": "^29.4.0",
     "ts-node": "^10.9.1",
     "typescript-eslint": "^8.32.1",
@@ -426,10 +429,28 @@
     "isPreReleaseVersion": false
   },
   "dependencies": {
-    "acorn": "^8.15.0",
     "@sveltejs/acorn-typescript": "^1.0.6",
+    "acorn": "^8.15.0",
     "axios": "^1.9.0",
     "ignore": "^7.0.5",
     "p-limit": "^6.2.0"
-  }
+  },
+  "exclude": [
+    ".vscode/**",
+    ".vscode-test/**",
+    "src/**",
+    "node_modules/**",
+    "coverage/**",
+    ".gitignore",
+    ".yarnrc",
+    "vsc-extension-quickstart.md",
+    "jest.config.ts",
+    "eslint.config.mjs",
+    "tsconfig.json",
+    "**/*.map",
+    "**/*.ts",
+    "!out/**",
+    "*.vsix",
+    ".github/**"
+  ]
 }

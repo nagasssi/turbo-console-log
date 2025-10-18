@@ -9,7 +9,10 @@ describe('withinConditionBlockLine', () => {
       it(name, () => {
         const document = makeTextDocument(lines);
         // eslint-disable-next-line @typescript-eslint/no-explicit-any
-      const ast = parseCode(document.getText(), (document as any).fileExtension)!;
+        const ast = parseCode(
+          document.getText(),
+          (document as any).fileExtension,
+        )!;
         const result = withinConditionBlockLine(
           ast,
           document,
