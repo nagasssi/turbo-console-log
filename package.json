@@ -1,17 +1,149 @@
 {
   "name": "turbo-console-log",
-  "version": "1.0.0",
-  "description": "",
-  "scripts": {
-    "start": "func start",
-    "test": "echo \"No tests yet...\""
+  "displayName": "Turbo Console Log",
+  "description": "Supercharge your debugging with turbo-charged console logging",
+  "version": "3.8.1",
+  "publisher": "ChakrounAchraf",
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/Chakroun-Anas/turbo-console-log.git"
   },
-  "dependencies": {
-    "@azure/functions": "^4.0.0"
+  "bugs": {
+    "url": "https://github.com/Chakroun-Anas/turbo-console-log/issues"
+  },
+  "engines": {
+    "vscode": "^1.94.0"
+  },
+  "categories": [
+    "Other"
+  ],
+  "keywords": [
+    "console",
+    "debug",
+    "log",
+    "turbo"
+  ],
+  "main": "./out/extension.js",
+  "contributes": {
+    "commands": [
+      {
+        "command": "turbo-console-log.displayLogMessage",
+        "title": "Turbo Console Log: Display Log Message"
+      },
+      {
+        "command": "turbo-console-log.insertConsoleLog",
+        "title": "Turbo Console Log: Insert Console Log"
+      },
+      {
+        "command": "turbo-console-log.insertConsoleError",
+        "title": "Turbo Console Log: Insert Console Error"
+      },
+      {
+        "command": "turbo-console-log.insertConsoleWarn",
+        "title": "Turbo Console Log: Insert Console Warn"
+      },
+      {
+        "command": "turbo-console-log.insertConsoleInfo",
+        "title": "Turbo Console Log: Insert Console Info"
+      },
+      {
+        "command": "turbo-console-log.insertConsoleTable",
+        "title": "Turbo Console Log: Insert Console Table"
+      },
+      {
+        "command": "turbo-console-log.insertCustomLog",
+        "title": "Turbo Console Log: Insert Custom Log"
+      },
+      {
+        "command": "turbo-console-log.deleteAllLogMessages",
+        "title": "Turbo Console Log: Delete All Log Messages"
+      },
+      {
+        "command": "turbo-console-log.commentAllLogMessages",
+        "title": "Turbo Console Log: Comment All Log Messages"
+      },
+      {
+        "command": "turbo-console-log.uncommentAllLogMessages",
+        "title": "Turbo Console Log: Uncomment All Log Messages"
+      },
+      {
+        "command": "turbo-console-log.correctAllLogMessages",
+        "title": "Turbo Console Log: Correct All Log Messages"
+      }
+    ],
+    "configuration": {
+      "title": "Turbo Console Log",
+      "properties": {
+        "turboConsoleLog.logMessagePrefix": {
+          "type": "string",
+          "default": "🚀",
+          "description": "The prefix used in the log message"
+        },
+        "turboConsoleLog.logMessageSuffix": {
+          "type": "string",
+          "default": "🔚",
+          "description": "The suffix used in the log message"
+        },
+        "turboConsoleLog.addSemicolonInTheEnd": {
+          "type": "boolean",
+          "default": true,
+          "description": "Whether to add a semicolon in the end of the log message"
+        },
+        "turboConsoleLog.insertEnclosingClass": {
+          "type": "boolean",
+          "default": true,
+          "description": "Whether to add the enclosing class name in the log message"
+        },
+        "turboConsoleLog.insertEnclosingFunction": {
+          "type": "boolean",
+          "default": true,
+          "description": "Whether to add the enclosing function name in the log message"
+        },
+        "turboConsoleLog.insertLineNumbers": {
+          "type": "boolean",
+          "default": true,
+          "description": "Whether to add the line number in the log message"
+        },
+        "turboConsoleLog.wrapLogMessage": {
+          "type": "boolean",
+          "default": false,
+          "description": "Whether to wrap the log message"
+        },
+        "turboConsoleLog.logFunction": {
+          "type": "string",
+          "default": "console.log",
+          "description": "The function to use for logging"
+        }
+      }
+    }
+  },
+  "scripts": {
+    "vscode:prepublish": "npm run build",
+    "build": "tsc -p ./",
+    "watch": "tsc-watch -p ./ --onSuccess \"echo Compilation successful\"",
+    "test": "jest",
+    "package": "vsce package",
+    "publish": "vsce publish"
   },
   "devDependencies": {
-    "@types/mocha": "^10.0.10",
-    "@types/vscode": "^1.105.0"
-  },
-  "main": "src/{index.js,functions/*.js}"
+    "@sveltejs/acorn-typescript": "^1.0.6",
+    "@types/chai": "^5.2.2",
+    "@types/glob": "^8.1.0",
+    "@types/mocha": "^10.0.6",
+    "@types/node": "^20.11.19",
+    "@types/vscode": "^1.94.0",
+    "@vscode/test-electron": "^2.3.9",
+    "@vscode/vsce": "^2.32.0",
+    "axios": "^1.12.2",
+    "chai": "^6.2.0",
+    "eslint": "^8.56.0",
+    "glob": "^10.4.5",
+    "jest": "^29.7.0",
+    "ts-jest": "^29.1.1",
+    "ts-node": "^10.9.2",
+    "tsc-watch": "^6.0.4",
+    "typescript": "^5.3.3",
+    "vscode-test": "^1.6.1"
+  }
 }
