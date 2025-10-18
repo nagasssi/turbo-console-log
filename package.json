@@ -1,17 +1,456 @@
 {
   "name": "turbo-console-log",
-  "version": "1.0.0",
-  "description": "",
-  "scripts": {
-    "start": "func start",
-    "test": "echo \"No tests yet...\""
+  "displayName": "Turbo Console Log",
+  "description": "Insert, manage, and clean log messages automatically in JavaScript and TypeScript — with AST-powered precision and full support for console log or custom log functions.",
+  "version": "3.8.1",
+  "publisher": "ChakrounAnas",
+  "engines": {
+    "vscode": "^1.94.0"
   },
-  "dependencies": {
-    "@azure/functions": "^4.0.0"
+  "icon": "images/icon.png",
+  "categories": [
+    "Debuggers",
+    "Programming Languages",
+    "Snippets",
+    "Visualization"
+  ],
+  "keywords": [
+    "console log",
+    "insert log",
+    "debug",
+    "javascript",
+    "typescript",
+    "debugging",
+    "log snippet",
+    "productivity",
+    "log panel",
+    "developer tools",
+    "tool",
+    "log management",
+    "log manager"
+  ],
+  "activationEvents": [
+    "onStartupFinished",
+    "onLanguage:javascript",
+    "onLanguage:javascriptreact",
+    "onLanguage:typescript",
+    "onLanguage:typescriptreact"
+  ],
+  "main": "./out/extension.js",
+  "files": [
+    "out/extension.js",
+    "images/icon.png",
+    "README.md",
+    "CHANGELOG.md",
+    "LICENSE.txt",
+    "package.json"
+  ],
+  "contributes": {
+    "configuration": {
+      "type": "object",
+      "title": "Turbo Console Log Configuration",
+      "properties": {
+        "turboConsoleLog.wrapLogMessage": {
+          "type": "boolean",
+          "default": false,
+          "description": "Determine if the log message should be wrapped or not."
+        },
+        "turboConsoleLog.logMessagePrefix": {
+          "type": "string",
+          "default": "🚀",
+          "description": "The prefix of the log message."
+        },
+        "turboConsoleLog.logMessageSuffix": {
+          "type": "string",
+          "default": ":",
+          "description": "The suffix of the log message."
+        },
+        "turboConsoleLog.includeFilename": {
+          "type": "boolean",
+          "default": false,
+          "description": "Whether to include the file name of the log message."
+        },
+        "turboConsoleLog.includeLineNum": {
+          "type": "boolean",
+          "default": false,
+          "description": "Whether to include the line number of the log message."
+        },
+        "turboConsoleLog.addSemicolonInTheEnd": {
+          "type": "boolean",
+          "default": false,
+          "description": "Whether to add or not a semicolon in the end of the log message."
+        },
+        "turboConsoleLog.insertEnclosingClass": {
+          "type": "boolean",
+          "default": true,
+          "description": "Whether to insert or not the enclosing class of the selected variable in the log message."
+        },
+        "turboConsoleLog.logCorrectionNotificationEnabled": {
+          "type": "boolean",
+          "default": false,
+          "description": "Whether to enable or disable the log correction notification."
+        },
+        "turboConsoleLog.insertEnclosingFunction": {
+          "type": "boolean",
+          "default": true,
+          "description": "Whether to insert or not the enclosing function of the selected variable in the log message."
+        },
+        "turboConsoleLog.insertEmptyLineBeforeLogMessage": {
+          "type": "boolean",
+          "default": false,
+          "description": "Whether to insert an empty line before the log message or not."
+        },
+        "turboConsoleLog.insertEmptyLineAfterLogMessage": {
+          "type": "boolean",
+          "default": false,
+          "description": "Whether to insert an empty line after the log message or not."
+        },
+        "turboConsoleLog.delimiterInsideMessage": {
+          "type": "string",
+          "default": "~",
+          "description": "The delimiter that will separate the different log message elements (file name, line number, class, function and variable)"
+        },
+        "turboConsoleLog.quote": {
+          "type": "string",
+          "enum": [
+            "\"",
+            "'",
+            "`"
+          ],
+          "default": "\"",
+          "description": "Double quotes, single quotes or backtick"
+        },
+        "turboConsoleLog.logFunction": {
+          "type": "string",
+          "default": "log",
+          "description": "Specify the log function to use with 'displayCustomLogMessage' command. "
+        },
+        "turboConsoleLog.releaseReviewTargetWindow": {
+          "type": "string",
+          "enum": [
+            "Morning",
+            "Afternoon",
+            "Evening",
+            "Night"
+          ],
+          "default": "Night",
+          "description": "Choose your preferred time window for receiving release notifications. Options: Morning (7-12), Afternoon (13-17), Evening (17-21), or Night (21-2)."
+        },
+        "turboConsoleLog.isTurboTelemetryEnabled": {
+          "type": "boolean",
+          "default": true,
+          "description": "Enable anonymous telemetry for Turbo Console Log analytics (respects VS Code's global telemetry settings). This helps improve the extension but never collects personal information.",
+          "tags": [
+            "telemetry",
+            "usesOnlineServices"
+          ]
+        },
+        "turboConsoleLog.dynamicFreemiumPanel": {
+          "type": "boolean",
+          "default": true,
+          "description": "Enable dynamic content fetching for the freemium panel. Recommended to keep enabled for the latest features and updates."
+        }
+      }
+    },
+    "commands": [
+      {
+        "command": "turboConsoleLog.displayLogMessage",
+        "title": "Turbo Console Log: Insert console log message (Legacy)"
+      },
+      {
+        "command": "turboConsoleLog.insertConsoleLog",
+        "title": "Turbo Console Log: Insert console log message"
+      },
+      {
+        "command": "turboConsoleLog.insertConsoleInfo",
+        "title": "Turbo Console Log: Insert console info message"
+      },
+      {
+        "command": "turboConsoleLog.insertConsoleDebug",
+        "title": "Turbo Console Log: Insert console debug message"
+      },
+      {
+        "command": "turboConsoleLog.insertConsoleTable",
+        "title": "Turbo Console Log: Insert console table message"
+      },
+      {
+        "command": "turboConsoleLog.insertConsoleWarn",
+        "title": "Turbo Console Log: Insert console warn message"
+      },
+      {
+        "command": "turboConsoleLog.insertConsoleError",
+        "title": "Turbo Console Log: Insert console error message"
+      },
+      {
+        "command": "turboConsoleLog.insertCustomLog",
+        "title": "Turbo Console Log: Insert custom log message"
+      },
+      {
+        "command": "turboConsoleLog.commentAllLogMessages",
+        "title": "Turbo Console Log: Comment Turbo Log Messages"
+      },
+      {
+        "command": "turboConsoleLog.uncommentAllLogMessages",
+        "title": "Turbo Console Log: Uncomment Turbo Log Messages"
+      },
+      {
+        "command": "turboConsoleLog.deleteAllLogMessages",
+        "title": "Turbo Console Log: Delete Turbo Log Messages"
+      },
+      {
+        "command": "turboConsoleLog.correctAllLogMessages",
+        "title": "Turbo Console Log: Correct Turbo Log Messages"
+      },
+      {
+        "command": "turboConsoleLog.activateTurboProBundle",
+        "title": "Turbo Console Log: Activate Turbo Pro Bundle"
+      },
+      {
+        "command": "turboConsoleLogPro.hideLogs",
+        "title": "Turbo Console Log Pro: Hide Logs"
+      },
+      {
+        "command": "turboConsoleLogPro.showLogs",
+        "title": "Turbo Console Log Pro: Show Logs"
+      }
+    ],
+    "keybindings": [
+      {
+        "command": "turboConsoleLog.displayLogMessage",
+        "key": "ctrl+alt+l",
+        "mac": "ctrl+alt+l",
+        "when": "editorTextFocus"
+      },
+      {
+        "command": "turboConsoleLog.insertConsoleLog",
+        "key": "ctrl+k ctrl+l",
+        "mac": "cmd+k cmd+l",
+        "when": "editorTextFocus"
+      },
+      {
+        "command": "turboConsoleLog.insertConsoleInfo",
+        "key": "ctrl+k ctrl+n",
+        "mac": "cmd+k cmd+n",
+        "when": "editorTextFocus"
+      },
+      {
+        "command": "turboConsoleLog.insertConsoleDebug",
+        "key": "ctrl+k ctrl+b",
+        "mac": "cmd+k cmd+b",
+        "when": "editorTextFocus"
+      },
+      {
+        "command": "turboConsoleLog.insertConsoleTable",
+        "key": "ctrl+k ctrl+t",
+        "mac": "cmd+k cmd+t",
+        "when": "editorTextFocus"
+      },
+      {
+        "command": "turboConsoleLog.insertConsoleWarn",
+        "key": "ctrl+k ctrl+r",
+        "mac": "cmd+k cmd+r",
+        "when": "editorTextFocus"
+      },
+      {
+        "command": "turboConsoleLog.insertConsoleError",
+        "key": "ctrl+k ctrl+e",
+        "mac": "cmd+k cmd+e",
+        "when": "editorTextFocus"
+      },
+      {
+        "command": "turboConsoleLog.insertCustomLog",
+        "key": "ctrl+k ctrl+k",
+        "mac": "cmd+k cmd+k",
+        "when": "editorTextFocus"
+      },
+      {
+        "command": "turboConsoleLog.commentAllLogMessages",
+        "key": "alt+shift+c",
+        "mac": "alt+shift+c",
+        "when": "editorTextFocus"
+      },
+      {
+        "command": "turboConsoleLog.uncommentAllLogMessages",
+        "key": "alt+shift+u",
+        "mac": "alt+shift+u",
+        "when": "editorTextFocus"
+      },
+      {
+        "command": "turboConsoleLog.deleteAllLogMessages",
+        "key": "alt+shift+d",
+        "mac": "alt+shift+d",
+        "when": "editorTextFocus"
+      },
+      {
+        "command": "turboConsoleLog.correctAllLogMessages",
+        "key": "alt+shift+x",
+        "mac": "alt+shift+x",
+        "when": "editorTextFocus"
+      },
+      {
+        "command": "turboConsoleLog.activateTurboProBundle",
+        "key": "alt+shift+p",
+        "mac": "alt+shift+p",
+        "when": "editorTextFocus"
+      }
+    ],
+    "viewsContainers": {
+      "activitybar": [
+        {
+          "id": "turboConsoleLogProPanelContainer",
+          "title": "Turbo Console Log",
+          "icon": "images/icon.png"
+        }
+      ]
+    },
+    "views": {
+      "turboConsoleLogProPanelContainer": [
+        {
+          "id": "turboConsoleLogProView",
+          "name": "PRO Panel",
+          "icon": "images/icon.png",
+          "when": "turboConsoleLog:isInitialized && turboConsoleLog:isPro"
+        },
+        {
+          "id": "turboConsoleLogFreemiumLauncher",
+          "name": "Become Pro",
+          "icon": "images/icon.png",
+          "when": "turboConsoleLog:isInitialized && !turboConsoleLog:isPro && !turboConsoleLog:isRepairMode && turboConsoleLog:isLauncherMode"
+        },
+        {
+          "id": "turboConsoleLogFreemiumPanel",
+          "name": "Turbo Console Log",
+          "icon": "images/icon.png",
+          "type": "webview",
+          "when": "turboConsoleLog:isInitialized && !turboConsoleLog:isPro && !turboConsoleLog:isRepairMode && !turboConsoleLog:isLauncherMode"
+        },
+        {
+          "id": "turboConsoleLogBundleRepairPanel",
+          "name": "Bundle Repair Mode",
+          "icon": "images/icon.png",
+          "type": "webview",
+          "when": "turboConsoleLog:isInitialized && turboConsoleLog:isRepairMode"
+        }
+      ]
+    },
+    "menus": {
+      "view/item/context": [
+        {
+          "command": "turboConsoleLog.commentAllLogMessages",
+          "when": "viewItem == fileLogsNode",
+          "group": "turbo"
+        },
+        {
+          "command": "turboConsoleLog.uncommentAllLogMessages",
+          "when": "viewItem == fileLogsNode",
+          "group": "turbo"
+        },
+        {
+          "command": "turboConsoleLog.deleteAllLogMessages",
+          "when": "viewItem == fileLogsNode",
+          "group": "turbo"
+        },
+        {
+          "command": "turboConsoleLog.correctAllLogMessages",
+          "when": "viewItem == fileLogsNode",
+          "group": "turbo"
+        },
+        {
+          "command": "turboConsoleLogPro.hideLogs",
+          "when": "viewItem == fileLogsNode",
+          "group": "turbo"
+        },
+        {
+          "command": "turboConsoleLogPro.showLogs",
+          "when": "viewItem == hiddenFileLogsNode",
+          "group": "turbo"
+        }
+      ]
+    }
+  },
+  "scripts": {
+    "vscode:prepublish": "rimraf out && npm run esbuild-base -- --minify",
+    "esbuild-base": "esbuild ./src/extension.ts --bundle --outfile=out/extension.js --external:vscode --format=cjs --platform=node",
+    "esbuild-base-minify": "esbuild ./src/extension.ts --bundle --outfile=out/extension.js --external:vscode --format=cjs --platform=node --minify",
+    "esbuild-base-minify-analyze": "esbuild ./src/extension.ts --bundle --outfile=out/extension.js --external:vscode --format=cjs --platform=node --minify --analyze",
+    "esbuild": "npm run esbuild-base -- --sourcemap",
+    "esbuild-watch": "npm run esbuild-base -- --sourcemap --watch",
+    "watch": "npm run esbuild-watch",
+    "lint": "tsc --noEmit && eslint src --ext ts",
+    "pretest": "npm run esbuild-base",
+    "test:compile": "rimraf out && tsc -p ./ && cpx2 \"src/mocha-tests/files/**/*\" out/mocha-tests/files/",
+    "test": "npm run test:compile && npm run test:jest && node ./out/mocha-tests/runTests.js",
+    "test:jest": "jest --config jest.config.ts",
+    "test:jest:coverage": "jest --config jest.config.ts --coverage",
+    "test:jest:coverage:report": "jest --config jest.config.ts --coverage && open ./coverage/lcov-report/index.html",
+    "format": "prettier --write \"src/**/*.ts\""
   },
   "devDependencies": {
-    "@types/mocha": "^10.0.10",
-    "@types/vscode": "^1.105.0"
+    "@types/acorn": "^6.0.4",
+    "@types/chai": "^5.0.0",
+    "@types/glob": "^7.1.3",
+    "@types/jest": "^30.0.0",
+    "@types/mocha": "^8.0.0",
+    "@types/node": "^24.0.3",
+    "@types/vscode": "^1.94.0",
+    "@typescript-eslint/eslint-plugin": "^8.32.1",
+    "@typescript-eslint/parser": "^8.32.1",
+    "@vscode/test-electron": "^2.4.1",
+    "chai": "^4.3.7",
+    "chalk": "^4.1.0",
+    "cpx2": "^8.0.0",
+    "esbuild": "^0.25.4",
+    "eslint": "^9.27.0",
+    "eslint-config-prettier": "^8.5.0",
+    "eslint-plugin-prettier": "^3.1.4",
+    "glob": "^7.1.6",
+    "jest": "^30.0.0",
+    "mocha": "^11.2.2",
+    "prettier": "^3.5.3",
+    "rimraf": "^6.0.1",
+    "ts-jest": "^29.4.0",
+    "ts-node": "^10.9.1",
+    "typescript-eslint": "^8.32.1",
+    "vscode-test": "^1.6.1"
   },
-  "main": "src/{index.js,functions/*.js}"
+  "license": "SEE LICENSE IN LICENSE.txt",
+  "bugs": {
+    "url": "https://github.com/Chakroun-Anas/turbo-console-log/issues",
+    "email": "chakroun.anas@outlook.com"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/Chakroun-Anas/turbo-console-log"
+  },
+  "__metadata": {
+    "id": "6623619a-676d-4cde-943f-a3c193b44fc0",
+    "publisherDisplayName": "ChakrounAnas",
+    "publisherId": "4fecec8e-335d-44fc-ab16-5356745fb1ac",
+    "isPreReleaseVersion": false
+  },
+  "dependencies": {
+    "@sveltejs/acorn-typescript": "^1.0.6",
+    "acorn": "^8.15.0",
+    "axios": "^1.9.0",
+    "ignore": "^7.0.5",
+    "p-limit": "^6.2.0"
+  },
+  "exclude": [
+    ".vscode/**",
+    ".vscode-test/**",
+    "src/**",
+    "node_modules/**",
+    "coverage/**",
+    ".gitignore",
+    ".yarnrc",
+    "vsc-extension-quickstart.md",
+    "jest.config.ts",
+    "eslint.config.mjs",
+    "tsconfig.json",
+    "**/*.map",
+    "**/*.ts",
+    "!out/**",
+    "*.vsix",
+    ".github/**"
+  ]
 }
