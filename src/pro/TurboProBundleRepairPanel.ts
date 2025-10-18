@@ -68,7 +68,13 @@ export class TurboProBundleRepairPanel implements vscode.WebviewViewProvider {
 
   private getHtml(loading: boolean): string {
     return `
+      <!DOCTYPE html>
       <html>
+        <head>
+          <meta charset="UTF-8">
+          <meta name="viewport" content="width=device-width, initial-scale=1.0">
+          <meta http-equiv="Content-Security-Policy" content="default-src 'none'; style-src 'unsafe-inline'; script-src 'unsafe-inline';">
+        </head>
         <style>
           .primary-color {
             color: #FF6B6B;
