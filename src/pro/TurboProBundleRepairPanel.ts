@@ -74,28 +74,28 @@ export class TurboProBundleRepairPanel implements vscode.WebviewViewProvider {
           <meta charset="UTF-8">
           <meta name="viewport" content="width=device-width, initial-scale=1.0">
           <meta http-equiv="Content-Security-Policy" content="default-src 'none'; style-src 'unsafe-inline'; script-src 'unsafe-inline';">
+          <style>
+            .primary-color {
+              color: #FF6B6B;
+            }
+            .secondary-color {
+              color: #FFC947;
+            }
+            .button {
+              display: inline-block;
+              padding: 14px 22px;
+              width: 80%;
+              background-color: #FF6B6B;
+              color: white;
+              border-radius: 6px;
+              font-weight: bold;
+              text-decoration: none;
+              text-align: center;
+              cursor: pointer;
+              max-width: 320px;
+            }
+          </style>
         </head>
-        <style>
-          .primary-color {
-            color: #FF6B6B;
-          }
-          .secondary-color {
-            color: #FFC947;
-          }
-          .button {
-            display: inline-block;
-            padding: 14px 22px;
-            width: 80%;
-            background-color: #FF6B6B;
-            color: white;
-            border-radius: 6px;
-            font-weight: bold;
-            text-decoration: none;
-            text-align: center;
-            cursor: pointer;
-            max-width: 320px;
-          }
-        </style>
         <body style="padding-top: 0; display: flex; flex-direction: column; align-items: center; overflow-x: hidden;">
           <h2 class="primary-color" style="text-align: center;">No Panick We Will Repair This Together 🚀</h2>
           <p style="text-align: center; padding: 0 16px;">
